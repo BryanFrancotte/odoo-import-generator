@@ -2,7 +2,6 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CSVReader from 'react-csv-reader';
-import { ipcRenderer } from 'electron';
 
 const parsingOptions ={
   header: true,
@@ -11,9 +10,10 @@ const parsingOptions ={
 }
 
 function handleExport(exportedData: any) {
-  const ipc = ipcRenderer;
-  let reply = ipc.sendSync('getEncoded', '/Users/bryanfrancotte/Documents/Clients/Chambord/assets-picture/william-krause-0zERrbey8XM-unsplash.png"');
-  console.log(reply);
+  
+  //const ipc = ipcRenderer;
+  //ipcRenderer.sendSync('getEncoded', '/Users/bryanfrancotte/Documents/Clients/Chambord/assets-picture/william-krause-0zERrbey8XM-unsplash.png"');
+  //console.log(reply);
 }
 
 function App() {
