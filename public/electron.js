@@ -1,25 +1,10 @@
 const electron = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
-const fs = require("fs");
+//const fs = require("fs");
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-
-const ipc = electron.ipcMain;
-
-ipc.on('getEncoded', (event, args) => {
-    console.log("recinving signal");
-    let base64Result = base64_encode(args);
-    event.returnValue(base64Result);
-})
-
-function base64_encode(file) {
-    // read binary data
-    var bitmap = fs.readFileSync(file);
-    // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
-}
 
 let mainWindow;
 function createWindow() {
@@ -29,10 +14,15 @@ function createWindow() {
         width: 900,
         height: 680,
         webPreferences: {
-            nodeIntegration: false,
-            preload: __dirname + '/preload.js'
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
+            //preload: __dirname + '/preload.js'
         }
     });
+    if(isDev) {
+        mainWindow.webContents.openDevTools();
+    }
     mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
     mainWindow.on("closed", () => (mainWindow = null));
 }
