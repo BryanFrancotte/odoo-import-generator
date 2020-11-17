@@ -80,7 +80,7 @@ export default function SearchAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            Odoo Import Tool
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
