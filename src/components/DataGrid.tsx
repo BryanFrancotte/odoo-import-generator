@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CSS from 'csstype';
+import { Backdrop, Fade, Modal } from '@material-ui/core';
 
 interface Column {
   id: 'id' | 'default_code' | 'name' | 'image_1920' | 'x_studio_product_description_image' | 'x_studio_product_origin_image';
@@ -30,86 +31,67 @@ const columns: Column[] = [
   { 
     id: 'image_1920',
     label: 'main picture',
-    format: (value: string) => {
-      if (value !== null) {
-        if (value.startsWith('/9j/')) {
-          return (
-            <img style={miniatureStyle} alt='main' src={'data:image/jpg;base64, ' + value}/>
-          ); 
-        } else if(value.startsWith('iVBOR')) {
-          return (
-            <img style={miniatureStyle} alt='main' src={'data:image/png;base64, ' + value}/>
-          )
-        } else {
-          return (
-            <img style={miniatureStyle} alt='main' src={value}/>
-          )
-        }
-      }
-    }
+    format: (value: string) => displayImage(value, 'main')
   },
   { 
     id: 'x_studio_product_description_image', 
     label: 'description picture',
-    format: (value: string) => {
-      if (value !== null) {
-        if (value.startsWith('/9j/')) {
-          return (
-            <img style={miniatureStyle} alt='description' src={'data:image/jpg;base64, ' + value}/>
-          ); 
-        } else if(value.startsWith('iVBOR')) {
-          return (
-            <img style={miniatureStyle} alt='description' src={'data:image/png;base64, ' + value}/>
-          )
-        } else {
-          return (
-            <img style={miniatureStyle} alt='description' src={value}/>
-          )
-        }
-      }
-    }
+    format: (value: string) => displayImage(value, 'description')
   },
   { 
     id: 'x_studio_product_origin_image', 
     label: 'origin picture',
-    format: (value: string) => {
-      if (value !== null) {
-        if (value.startsWith('/9j/')) {
-          return (
-            <img style={miniatureStyle} alt='origin' src={'data:image/jpg;base64, ' + value}/>
-          ); 
-        } else if(value.startsWith('iVBOR')) {
-          return (
-            <img style={miniatureStyle} alt='origin' src={'data:image/png;base64, ' + value}/>
-          )
-        } else {
-          return (
-            <img style={miniatureStyle} alt='origin' src={value}/>
-          )
-        }
-      }
-    }
+    format: (value: string) => displayImage(value, 'origin')
   }
 ];
+
+function displayImage(value: string, altText: string) {
+  if (value !== null) {
+    if (value.startsWith('/9j/')) {
+      return (
+        <img style={miniatureStyle} alt={altText} src={'data:image/jpg;base64, ' + value}/>
+      ); 
+    } else if(value.startsWith('iVBOR')) {
+      return (
+        <img style={miniatureStyle} alt={altText} src={'data:image/png;base64, ' + value}/>
+      )
+    } else {
+      return (
+        <img style={miniatureStyle} alt={altText} src={value}/>
+      )
+    }
+  }
+}
 
 interface DataGridProps {
   rows: any
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     width: '100%',
   },
   container: {
     maxHeight: 600,
   },
-  
-});
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 export default function DataGrid(props: DataGridProps) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(50);
+  const [open, setOpen] = React.useState(false);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -118,6 +100,14 @@ export default function DataGrid(props: DataGridProps) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   return (
     <Paper className={classes.root}>
@@ -143,7 +133,7 @@ export default function DataGrid(props: DataGridProps) {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell key={column.id} align={column.align} onClick={handleOpen}>
                         {column.format? column.format(value) : value}
                       </TableCell>
                     );
@@ -163,6 +153,25 @@ export default function DataGrid(props: DataGridProps) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <h2 id="transition-modal-title">Transition modal</h2>
+            <p id="transition-modal-description">react-transition-group animates me.</p>
+          </div>
+        </Fade>
+      </Modal>
     </Paper>
   );
 }

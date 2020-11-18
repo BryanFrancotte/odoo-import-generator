@@ -9,10 +9,6 @@ function App() {
   const [parsedData, setParsedData] = useState(null);
   const [changeCounter, setChangeCounter] = useState(0);
 
-  function handleCSV(data: any) {
-    setParsedData(data);
-  }
-
   function handleChange() {
     // TODO: code that handles the changes
     // insert base 64 converted upload in parsedData
@@ -23,7 +19,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <SearchAppBar changeCounter={changeCounter}/>
-        <Body handleCsv={(data) => handleCSV(data)} 
+        <Body handleCsv={(data) => setParsedData(data)} 
           handleChange={() => handleChange()} parsedData={parsedData}/>
         <Button onClick={() => {handleChange()}}>Test changes</Button>
       </ThemeProvider>
