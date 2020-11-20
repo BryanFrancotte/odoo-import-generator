@@ -92,6 +92,7 @@ export default function DataGrid(props: DataGridProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(50);
   const [open, setOpen] = React.useState(false);
+  const [targetedRow, setTargetedRow] = React.useState();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -101,7 +102,8 @@ export default function DataGrid(props: DataGridProps) {
     setPage(0);
   };
 
-  const handleOpen = () => {
+  const handleOpen = (row: any) => {
+    setTargetedRow(row);
     setOpen(true);
   }
 
@@ -129,11 +131,11 @@ export default function DataGrid(props: DataGridProps) {
           <TableBody>
             {props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.code} onClick={() => handleOpen(row)}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align} onClick={handleOpen}>
+                      <TableCell key={column.id} align={column.align}>
                         {column.format? column.format(value) : value}
                       </TableCell>
                     );
@@ -153,6 +155,8 @@ export default function DataGrid(props: DataGridProps) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+
+      {/* TODO: move the modal to another component ? */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -167,8 +171,8 @@ export default function DataGrid(props: DataGridProps) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">Transition modal</h2>
-            <p id="transition-modal-description">react-transition-group animates me.</p>
+            <h2 id="transition-modal-title">Product name</h2>
+            <p id="transition-modal-description">Drag and drop the Pictures to add them to the Product</p>
           </div>
         </Fade>
       </Modal>
