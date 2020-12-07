@@ -171,7 +171,14 @@ export default function DataGrid(props: DataGridProps) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">Product name</h2>
+            
+            <h2 id="transition-modal-title">
+              {
+                // try to find another way but this works so fuck it ^^'
+                // @ts-ignore: Object is possibly 'null'.
+                targetedRow?.name
+              }
+            </h2>
             <p id="transition-modal-description">Drag and drop the Pictures to add them to the Product</p>
           </div>
         </Fade>
