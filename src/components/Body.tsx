@@ -17,7 +17,7 @@ export default function Body(props: BodyProps) {
     }
     if(props.parsedData === null) {
         return (
-            <CSVReader parserOptions={parsingConfig} onFileLoaded={(data, fileInfo) => props.handleCsv(data)}/>
+            <CSVReader parserOptions={parsingConfig} onFileLoaded={(data) => props.handleCsv(data)}/>
         );
     } else  {
         return (

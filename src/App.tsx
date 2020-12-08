@@ -17,13 +17,23 @@ function App() {
 
   function processImage(img: File, imgName: string, productId: string) {
     if (img === undefined) { return; }
-     // @ts-ignore: Object is possibly 'null'.
+    const reader = new FileReader();
+    reader.onabort = () => console.log('file reading was aborted');
+    reader.onerror = () => console.log('file reading has failed');
+    reader.onload = () => {
+      const binaryStr = reader.result;
+      // @ts-ignore
+      const base64Result = btoa(binaryStr.toString());
+      console.log(base64Result);
+    }
+    // @ts-ignore: Object is possibly 'null'.
     let i = parsedData.findIndex(d => d.id === productId);
     switch(imgName) {
       case 'MAIN':
-        // @ts-ignore: Object is possibly 'null'.
-        // parsedData[i].image_1920 =
-        console.log(parsedData[i].name);
+        console.log(img)
+        reader.readAsBinaryString(img);
+        //@ts-ignore
+        console.log('Product\'s name' + parsedData[i].name);
         setChangeCounter(changeCounter + 1);
       break;
       case 'DESCRIPTION':

@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CSS from 'csstype';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
-import { DropzoneArea, DropzoneAreaBase } from 'material-ui-dropzone';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 interface Column {
   id: 'id' | 'default_code' | 'name' | 'image_1920' | 'x_studio_product_description_image' | 'x_studio_product_origin_image';
@@ -95,7 +95,6 @@ export default function DataGrid(props: DataGridProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(50);
   const [open, setOpen] = React.useState(false);
   const [targetedRow, setTargetedRow] = React.useState();
-  let testfile;
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
