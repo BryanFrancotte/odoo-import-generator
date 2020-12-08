@@ -6,6 +6,7 @@ interface BodyProps {
     parsedData: any;
     handleCsv: HandleCsv;
     handleChange: any;
+    handlePictureChange: (img: File, imgName: string, productId: string) => void;
 }
 
 export default function Body(props: BodyProps) {
@@ -20,7 +21,8 @@ export default function Body(props: BodyProps) {
         );
     } else  {
         return (
-            <DataGrid rows={props.parsedData} />
+            <DataGrid rows={props.parsedData} 
+                onPictureChange={(img, imgName, productId) => props.handlePictureChange(img, imgName, productId)} />
         );
     }
 }

@@ -11,6 +11,7 @@ function createWindow() {
         width: 1200,
         height: 750,
     });
+    mainWindow.maximize();
     if(isDev) {
         mainWindow.webContents.openDevTools();
     }
