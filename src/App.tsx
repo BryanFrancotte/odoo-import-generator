@@ -20,32 +20,39 @@ function App() {
     const reader = new FileReader();
     reader.onabort = () => console.log('file reading was aborted');
     reader.onerror = () => console.log('file reading has failed');
-    reader.onload = () => {
-      const binaryStr = reader.result;
-      // @ts-ignore
-      const base64Result = btoa(binaryStr.toString());
-      console.log(base64Result);
-    }
-    // @ts-ignore: Object is possibly 'null'.
+    // @ts-ignore
     let i = parsedData.findIndex(d => d.id === productId);
+    
     switch(imgName) {
       case 'MAIN':
-        console.log(img)
-        reader.readAsBinaryString(img);
-        //@ts-ignore
-        console.log('Product\'s name' + parsedData[i].name);
-        setChangeCounter(changeCounter + 1);
+        reader.onload = () => {
+          const binaryStr = reader.result;
+          // @ts-ignore
+          parsedData[i].image_1920 = btoa(binaryStr.toString());
+        }
       break;
       case 'DESCRIPTION':
-        console.log('description');
-        setChangeCounter(changeCounter + 1);
+        reader.onload = () => {
+          const binaryStr = reader.result;
+          // @ts-ignore
+          parsedData[i].x_studio_product_description_image = btoa(binaryStr.toString());
+        }
       break;
       case 'ORIGIN':
-        console.log('origin');
-        setChangeCounter(changeCounter + 1);
+        reader.onload = () => {
+          const binaryStr = reader.result;
+          // @ts-ignore
+          parsedData[i].x_studio_product_origin_image = btoa(binaryStr.toString());
+        }
       break;
+      default:
+        return;
     }
+    reader.readAsBinaryString(img);
+    setChangeCounter(changeCounter + 1);
   }
+
+  function removeImage() {}
 
   return (
     <div className="App">
