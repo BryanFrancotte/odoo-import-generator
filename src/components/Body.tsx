@@ -5,8 +5,8 @@ import DataGrid from './DataGrid';
 interface BodyProps {
     parsedData: any;
     handleCsv: HandleCsv;
-    handleChange: any;
     handlePictureChange: (img: File, imgName: string, productId: string) => void;
+    handlePictureRemove: (imgName: string, productId: string) => void;
 }
 
 export default function Body(props: BodyProps) {
@@ -15,14 +15,16 @@ export default function Body(props: BodyProps) {
         dynamicTyping: true,
         skipEmptyLines: true,
     }
-    if(props.parsedData === null) {
+    console.log(props.parsedData.length);
+    if(props.parsedData.length === 0) {
         return (
             <CSVReader parserOptions={parsingConfig} onFileLoaded={(data) => props.handleCsv(data)}/>
         );
     } else  {
         return (
             <DataGrid rows={props.parsedData} 
-                onPictureChange={(img, imgName, productId) => props.handlePictureChange(img, imgName, productId)} />
+                onPictureChange={(img, imgName, productId) => props.handlePictureChange(img, imgName, productId)}
+                onPictureDelete={(imgName, productId) => props.handlePictureRemove(imgName, productId)} />
         );
     }
 }

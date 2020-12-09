@@ -67,6 +67,7 @@ function displayImage(value: string, altText: string) {
 interface DataGridProps {
   rows: any;
   onPictureChange: (img: File, imgName: string, productId: string) => void;
+  onPictureDelete: (imgName: string, productId: string) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -185,15 +186,23 @@ export default function DataGrid(props: DataGridProps) {
               filesLimit={1}
               dropzoneText={"Drag and drop a main image here or click"}
               // @ts-ignore
-              onChange={(files) => props.onPictureChange(files[0], 'MAIN', targetedRow.id)}/>
+              onChange={(files) => props.onPictureChange(files[0], 'MAIN', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('MAIN', targetedRow.id)}/>
             <DropzoneArea acceptedFiles={['image/*']}
               filesLimit={1}
               dropzoneText={"Drag and drop a description image here or click"}
-              onChange={(files) => console.log('Files:', files)}/>
+              // @ts-ignore
+              onChange={(files) => props.onPictureChange(files[0], 'DESCRIPTION', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('DESCRIPTION', targetedRow.id)}/>
             <DropzoneArea acceptedFiles={['image/*']}
               filesLimit={1}
               dropzoneText={"Drag and drop an origin image here or click"}
-              onChange={(files) => console.log('Files:', files)}/>
+              // @ts-ignore
+              onChange={(files) => props.onPictureChange(files[0], 'ORIGIN', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('ORIGIN', targetedRow.id)}/>
           </div>
         </Fade>
       </Modal>
