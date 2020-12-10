@@ -8,6 +8,7 @@ import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles'
 import SaveIcon from '@material-ui/icons/Save';
 import SearchIcon from '@material-ui/icons/Search';
 import { Badge } from '@material-ui/core';
+import {CSVLink} from 'react-csv';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,12 +66,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AppBarProps {
-    changeCounter: number
+    changeCounter: number;
+    parsedData: any;
+    saveClickHandle: () => void;
 }
 
 export default function SearchAppBar(props: AppBarProps) {
   const classes = useStyles();
-
+    
   return (
     <div className={classes.root}>
         <AppBar position="static">
@@ -92,11 +95,16 @@ export default function SearchAppBar(props: AppBarProps) {
                     />
                 </div>
                 <div>
-                    <IconButton aria-label="show unsaved changes" color="inherit">
-                        <Badge badgeContent={props.changeCounter} color="secondary">
-                            <SaveIcon />
-                        </Badge>
-                    </IconButton>
+                    <CSVLink data={props.parsedData}
+                        filename={"odoo-ready-to-import.csv"}
+                        style={{textDecoration: 'none', color: "white"} as React.CSSProperties}
+                        onClick={() => {props.saveClickHandle()}}>
+                        <IconButton aria-label="show unsaved changes" color="inherit">
+                            <Badge badgeContent={props.changeCounter} color="secondary">
+                                <SaveIcon />
+                            </Badge>
+                        </IconButton>
+                    </CSVLink>
                 </div>
             </Toolbar>
         </AppBar>

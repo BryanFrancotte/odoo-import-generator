@@ -10,6 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import CSS from 'csstype';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 interface Column {
   id: 'id' | 'default_code' | 'name' | 'image_1920' | 'x_studio_product_description_image' | 'x_studio_product_origin_image';
@@ -64,7 +65,9 @@ function displayImage(value: string, altText: string) {
 }
 
 interface DataGridProps {
-  rows: any
+  rows: any;
+  onPictureChange: (img: File, imgName: string, productId: string) => void;
+  onPictureDelete: (imgName: string, productId: string) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -93,6 +96,7 @@ export default function DataGrid(props: DataGridProps) {
   const [rowsPerPage, setRowsPerPage] = React.useState(50);
   const [open, setOpen] = React.useState(false);
   const [targetedRow, setTargetedRow] = React.useState();
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -171,7 +175,6 @@ export default function DataGrid(props: DataGridProps) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            
             <h2 id="transition-modal-title">
               {
                 // try to find another way but this works so fuck it ^^'
@@ -179,7 +182,27 @@ export default function DataGrid(props: DataGridProps) {
                 targetedRow?.name
               }
             </h2>
-            <p id="transition-modal-description">Drag and drop the Pictures to add them to the Product</p>
+            <DropzoneArea acceptedFiles={['image/*']}
+              filesLimit={1}
+              dropzoneText={"Drag and drop a main image here or click"}
+              // @ts-ignore
+              onChange={(files) => props.onPictureChange(files[0], 'MAIN', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('MAIN', targetedRow.id)}/>
+            <DropzoneArea acceptedFiles={['image/*']}
+              filesLimit={1}
+              dropzoneText={"Drag and drop a description image here or click"}
+              // @ts-ignore
+              onChange={(files) => props.onPictureChange(files[0], 'DESCRIPTION', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('DESCRIPTION', targetedRow.id)}/>
+            <DropzoneArea acceptedFiles={['image/*']}
+              filesLimit={1}
+              dropzoneText={"Drag and drop an origin image here or click"}
+              // @ts-ignore
+              onChange={(files) => props.onPictureChange(files[0], 'ORIGIN', targetedRow.id)}
+              // @ts-ignore
+              onDelete={() => props.onPictureDelete('ORIGIN', targetedRow.id)}/>
           </div>
         </Fade>
       </Modal>
